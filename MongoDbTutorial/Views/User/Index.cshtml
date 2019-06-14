@@ -1,0 +1,54 @@
+﻿@model UserVM
+
+@using MongoDbTutorial.Models;
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Users</h2>
+
+<a class="btn btn-outline-primary" href="@Url.Action("Form")">Create a user</a>
+<a class="btn btn-outline-dark" href="javascript:void(0);">Delete selected users</a>
+<div class="clearfix"></div>
+<br />
+<div class="list">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Full Name</td>
+                    <td>Email</td>
+                    <td>User Name</td>
+                    <td>Password</td>
+                    <td>Inserted Date</td>
+                    <td>Updated Date</td>
+                    <td>Is Admin?</td>
+                    <td>Is Active?</td>
+                    <td>Is Deleted?</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.List)
+                {
+                    <tr>
+                        <td><input type="checkbox" id="id_@user.Id" value="@user.Id" /></td>
+                        <td><a href="@Url.Action("Form", "User", new { id = user.Id })">Edit</a></td>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>@user.UserName</td>
+                        <td>******</td>
+                        <td>@user.DateInserted</td>
+                        <td>@user.DateUpdated</td>
+                        <td>@user.IsAdmin</td>
+                        <td>@user.IsActive</td>
+                        <td>@user.IsDeleted</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

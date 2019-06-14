@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDbTutorial", "MongoDbTutorial\MongoDbTutorial.csproj", "{AE42CD6C-883E-408A-9F17-AD4EB71173ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{C16C85E0-D751-457E-B065-B7335E16E508}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{EFBC513D-45FE-4904-9118-07A1654168A4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE42CD6C-883E-408A-9F17-AD4EB71173ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE42CD6C-883E-408A-9F17-AD4EB71173ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE42CD6C-883E-408A-9F17-AD4EB71173ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE42CD6C-883E-408A-9F17-AD4EB71173ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C16C85E0-D751-457E-B065-B7335E16E508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C16C85E0-D751-457E-B065-B7335E16E508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C16C85E0-D751-457E-B065-B7335E16E508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C16C85E0-D751-457E-B065-B7335E16E508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFBC513D-45FE-4904-9118-07A1654168A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFBC513D-45FE-4904-9118-07A1654168A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFBC513D-45FE-4904-9118-07A1654168A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFBC513D-45FE-4904-9118-07A1654168A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9FEAB3F0-964A-4DF3-A581-70DC7CDAC922}
+	EndGlobalSection
+EndGlobal
