@@ -1,4 +1,2 @@
-*.html linguist-vendored
-scripts/* linguist-vendored
-content/* linguist-vendored
+* linguist-vendored
 *.cs linguist-language=Javascript
