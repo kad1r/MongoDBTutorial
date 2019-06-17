@@ -1,2 +1,4 @@
+*.html linguist-vendored
+scripts/* linguist-vendored
+content/* linguist-vendored
 *.cs linguist-language=Javascript
-#*.cs text diff=csharp
