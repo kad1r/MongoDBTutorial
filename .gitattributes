@@ -1,2 +1,7 @@
-* linguist-vendored
-*.cs linguist-language=Javascript
+* text auto
+
+*.csproj text merge=union
+*.sln    text merge=union eol=crlf
+
+content/* linguist-vendored
+scripts/* linguist-vendored
