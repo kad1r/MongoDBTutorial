@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDbTutorial.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -39,10 +40,9 @@ namespace MongoDbTutorial.Controllers
             if (!string.IsNullOrWhiteSpace(id))
             {
                 var objectId = new ObjectId(id);
-                var user = await _userRepository.collection
-                    .FindAsync(x => x.Id == objectId);
+                var user = await _userRepository.collection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-                vm.UserModel = user;
+                vm.User = user;
             }
 
             return View(vm);
@@ -51,56 +51,94 @@ namespace MongoDbTutorial.Controllers
         [HttpPost]
         public async Task<ActionResult> Form(string id, User user)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (!string.IsNullOrWhiteSpace(id))
+                try
                 {
-                    var filter = Builders<User>.Filter.Eq("_id", ObjectId.Parse(id));
-                    var model = Builders<User>.Update
-                        .Set("FullName", user.FullName)
-                        .Set("Email", user.Email)
-                        .Set("UserName", user.UserName)
-                        .Set("Password", user.Password)
-                        .Set("IsActive", user.IsActive)
-                        .Set("IsDeleted", user.IsDeleted)
-                        .Set("IsAdmin", user.IsAdmin)
-                        .Set("DateInserted", user.DateInserted)
-                        .Set("DateUpdated", DateTime.Now);
-                    var result = _userRepository.collection.UpdateOneAsync(filter, model);
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        var existing = await _userRepository.collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+                        var filter = Builders<User>.Filter.Eq("_id", ObjectId.Parse(id));
+                        var model = Builders<User>.Update
+                            .Set("FullName", user.FullName)
+                            .Set("Email", user.Email)
+                            .Set("UserName", user.UserName)
+                            .Set("Password", user.Password)
+                            .Set("IsActive", existing.IsActive)
+                            .Set("IsDeleted", existing.IsDeleted)
+                            .Set("IsAdmin", user.IsAdmin)
+                            .Set("DateInserted", existing.DateInserted)
+                            .Set("DateUpdated", DateTime.Now);
 
-                    return RedirectToAction("index");
+                        await _userRepository.collection.UpdateOneAsync(filter, model);
+                        TempData["process_result"] = "Update is ok";
+
+                        return RedirectToAction("form");
+                    }
+                    else
+                    {
+                        user.DateInserted = DateTime.Now;
+                        user.IsActive = true;
+                        user.IsDeleted = false;
+
+                        await _userRepository.collection.InsertOneAsync(user);
+                        TempData["process_result"] = "Insert is ok";
+
+                        return RedirectToAction("form");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    user.DateInserted = DateTime.Now;
-                    user.IsActive = true;
-                    user.IsDeleted = false;
+                    var msg = ex.Message;
+                    TempData["process_result"] = "Error occured: " + msg;
 
-                    await _userRepository.collection.InsertOneAsync(user);
+                    return RedirectToAction("form");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                var msg = ex.Message;
+                return RedirectToAction("index");
             }
-
-            return RedirectToAction("index");
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<JsonResult> Delete(List<string> ids)
         {
-            try
+            var result = new JsResult();
+            var errors = new List<string>();
+
+            if (Request.IsAjaxRequest())
             {
-                await _userRepository.collection
-                    .DeleteOneAsync(Builders<User>.Filter.Eq("_id", ObjectId.Parse(id)));
-                return RedirectToAction("index");
+                foreach (var id in ids)
+                {
+                    try
+                    {
+                        /*
+                         * we actually should not delete record from database
+                         * we just need to update delete column
+                         * await _userRepository.collection.DeleteOneAsync(Builders<User>.Filter.Eq("_id", ObjectId.Parse(id)));
+                         * */
+
+                        var existing = await _userRepository.collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+                        var filter = Builders<User>.Filter.Eq("_id", ObjectId.Parse(id));
+                        var model = Builders<User>.Update
+                            .Set("IsDeleted", true)
+                            .Set("DateUpdated", DateTime.Now);
+                        await _userRepository.collection.UpdateOneAsync(filter, model);
+                    }
+                    catch (Exception ex)
+                    {
+                        var msg = ex.Message;
+                        result.HasError = true;
+                        errors.Add("Id: " + id + " couldn't deleted.");
+                    }
+                }
             }
-            catch (Exception ex)
-            {
-                var msg = ex.Message;
-                return View("index");
-            }
+
+            result.ErrorMessage = result.HasError ? "Some records could not deleted!" : "Deletion is ok.";
+            result.ErrorList = errors;
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

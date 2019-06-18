@@ -29,7 +29,7 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr/>
+        <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year</p>
         </footer>
@@ -37,6 +37,17 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/main/site.js?v=@DateTime.Now.ToString("ddMMyyyy")"></script>
+    <script src="~/Scripts/main/helper.js?v=@DateTime.Now.ToString("ddMMyyyy")"></script>
     @RenderSection("scripts", required: false)
+    @{ 
+        if (TempData["process_result"] != null)
+        {
+            <script type="text/javascript">
+                console.log("asdasd");
+                alert("@TempData["process_result"]");
+            </script>
+        }
+    }
 </body>
 </html>

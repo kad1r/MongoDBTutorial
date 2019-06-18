@@ -16,3 +16,8 @@ textarea { max-width: 280px; }
 
 table thead { font-weight: bold; }
 table td { width: auto; }
+
+.hidden { display: none !important; }
+.text-red { color: red; }
+.inactive-background { background-color: #eaeaea !important; color: #ccc !important; }
+.center-block { display: inline-block; text-align: center; }

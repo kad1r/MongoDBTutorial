@@ -8,9 +8,9 @@
 }
 
 <h2>Users</h2>
-
+<input type="hidden" id="deleteForm" value="@Url.Action("Delete")" />
 <a class="btn btn-outline-primary" href="@Url.Action("Form")">Create a user</a>
-<a class="btn btn-outline-dark" href="javascript:void(0);">Delete selected users</a>
+<a class="btn btn-outline-dark delete" href="javascript:void(0);">Delete selected users</a>
 <div class="clearfix"></div>
 <br />
 <div class="list">
@@ -34,7 +34,7 @@
             <tbody>
                 @foreach (var user in Model.List)
                 {
-                    <tr>
+                    <tr class="@(user.IsDeleted ? "inactive-background" : "")">
                         <td><input type="checkbox" id="id_@user.Id" value="@user.Id" /></td>
                         <td><a href="@Url.Action("Form", "User", new { id = user.Id })">Edit</a></td>
                         <td>@user.FullName</td>
@@ -45,7 +45,7 @@
                         <td>@user.DateUpdated</td>
                         <td>@user.IsAdmin</td>
                         <td>@user.IsActive</td>
-                        <td>@user.IsDeleted</td>
+                        <td class="@(user.IsDeleted ? "text-red" : "")">@user.IsDeleted</td>
                     </tr>
                 }
             </tbody>
