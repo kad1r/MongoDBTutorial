@@ -140,5 +140,13 @@ namespace MongoDbTutorial.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        protected async Task CreateIndexOnCollection()
+        {
+            var notificationLogBuilder = Builders<User>.IndexKeys;
+            var indexModel = new CreateIndexModel<User>(notificationLogBuilder.Ascending(x => x.UserName));
+
+            await _userRepository.collection.Indexes.CreateOneAsync(indexModel);
+        }
     }
 }
