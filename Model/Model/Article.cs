@@ -8,9 +8,7 @@ namespace Model.Model
     public class Article
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
-
         public string Heading { get; set; }
         public string Summary { get; set; }
         public string Description { get; set; }
@@ -21,7 +19,6 @@ namespace Model.Model
         public DateTime? DateUpdated { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-
         public User CreatedUser { get; set; }
         public IList<Category> Categories { get; set; }
     }

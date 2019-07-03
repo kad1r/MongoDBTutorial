@@ -1,0 +1,52 @@
+﻿@model CategoryVM
+
+@using MongoDbTutorial.Models;
+
+@{
+    ViewBag.Title = "Categorys";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Categories</h2>
+<input type="hidden" id="deleteForm" value="@Url.Action("Delete")" />
+<a class="btn btn-outline-primary" href="@Url.Action("Form")">Create a Category</a>
+<a class="btn btn-outline-dark delete" href="javascript:void(0);">Delete selected Categories</a>
+<div class="clearfix"></div>
+<br />
+<div class="list">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Heading</td>
+                    <td>Summary</td>
+                    <td>Description</td>
+                    <td>Sequence</td>
+                    <td>Inserted Date</td>
+                    <td>Updated Date</td>
+                    <td>Is Active?</td>
+                    <td>Is Deleted?</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Category in Model.List)
+                {
+                    <tr class="@(Category.IsDeleted ? "inactive-background" : "")">
+                        <td><input type="checkbox" id="id_@Category.Id" value="@Category.Id" /></td>
+                        <td><a href="@Url.Action("Form", "Category", new { id = Category.Id })">Edit</a></td>
+                        <td class="text-nowrap">@Category.Heading</td>
+                        <td class="text-truncate">@Category.Summary</td>
+                        <td class="text-truncate">@Category.Description</td>
+                        <td>@Category.Sequence</td>
+                        <td>@Category.DateInserted</td>
+                        <td>@Category.DateUpdated</td>
+                        <td>@Category.IsActive</td>
+                        <td class="@(Category.IsDeleted ? "text-red" : "")">@Category.IsDeleted</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

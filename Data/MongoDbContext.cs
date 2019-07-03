@@ -22,7 +22,11 @@ namespace Data
             {
                 modelName = modelName.Replace("y", "ies");
             }
-            else
+			else if (modelName.EndsWith("s"))
+			{
+				modelName += "es";
+			}
+			else
             {
                 modelName += "s";
             }

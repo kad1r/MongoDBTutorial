@@ -11,20 +11,20 @@ using System.Web.Mvc;
 
 namespace MongoDbTutorial.Controllers
 {
-    public class UserController : Controller
+    public class CategoryController : Controller
     {
-        private readonly MongoDbContext<User> _userRepository;
+        private readonly MongoDbContext<Category> _categoryRepository;
 
-        public UserController()
+        public CategoryController()
         {
-            _userRepository = new MongoDbContext<User>();
+            _categoryRepository = new MongoDbContext<Category>();
         }
 
         public async Task<ActionResult> Index()
         {
-            var vm = new UserVM
+            var vm = new CategoryVM
             {
-                List = _userRepository.collection
+                List = _categoryRepository.collection
                     .AsQueryable()
                     .Where(x => x.IsActive)
                     .ToList()
@@ -35,21 +35,19 @@ namespace MongoDbTutorial.Controllers
 
         public async Task<ActionResult> Form(string id)
         {
-            var vm = new UserVM();
+            var vm = new CategoryVM();
 
             if (!string.IsNullOrWhiteSpace(id))
-            {
-                var objectId = new ObjectId(id);
-                var user = await _userRepository.collection.Find(x => x.Id == objectId).FirstOrDefaultAsync();
-
-                vm.User = user;
+			{
+				var objectId = new ObjectId(id);
+				vm.Category = await _categoryRepository.collection.Find(x => x.Id == objectId).FirstOrDefaultAsync();
             }
 
             return View(vm);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Form(string id, UserVM vm)
+        public async Task<ActionResult> Form(string id, CategoryVM vm)
         {
             if (ModelState.IsValid)
             {
@@ -58,30 +56,29 @@ namespace MongoDbTutorial.Controllers
                     if (!string.IsNullOrWhiteSpace(id))
 					{
 						var objectId = new ObjectId(id);
-						var existing = await _userRepository.collection.Find(x => x.Id == objectId).FirstOrDefaultAsync();
-                        var filter = Builders<User>.Filter.Eq("_id", objectId);
-                        var model = Builders<User>.Update
-                            .Set("FullName", vm.User.FullName)
-                            .Set("Email", vm.User.Email)
-                            .Set("UserName", vm.User.UserName)
-                            .Set("Password", vm.User.Password)
-                            .Set("IsActive", existing.IsActive)
+						var existing = await _categoryRepository.collection.Find(x => x.Id == objectId).FirstOrDefaultAsync();
+                        var filter = Builders<Category>.Filter.Eq("_id", ObjectId.Parse(id));
+                        var model = Builders<Category>.Update
+                            .Set("Heading", vm.Category.Heading)
+                            .Set("Summary", vm.Category.Summary)
+                            .Set("Description", vm.Category.Description)
+                            .Set("Sequence", vm.Category.Sequence)
+                            .Set("IsActive", vm.Category.IsActive)
                             .Set("IsDeleted", existing.IsDeleted)
-                            .Set("IsAdmin", vm.User.IsAdmin)
                             .Set("DateInserted", existing.DateInserted)
                             .Set("DateUpdated", DateTime.Now);
 
-                        await _userRepository.collection.UpdateOneAsync(filter, model);
+                        await _categoryRepository.collection.UpdateOneAsync(filter, model);
                         TempData["process_result"] = "Update is ok";
 
                         return RedirectToAction("form");
                     }
                     else
                     {
-                        vm.User.DateInserted = DateTime.Now;
-						vm.User.IsDeleted = false;
+						vm.Category.DateInserted = DateTime.Now;
+						vm.Category.IsDeleted = false;
 
-                        await _userRepository.collection.InsertOneAsync(vm.User);
+                        await _categoryRepository.collection.InsertOneAsync(vm.Category);
                         TempData["process_result"] = "Insert is ok";
 
                         return RedirectToAction("form");
@@ -90,6 +87,7 @@ namespace MongoDbTutorial.Controllers
                 catch (Exception ex)
                 {
                     var msg = ex.Message;
+
                     TempData["process_result"] = "Error occured: " + msg;
 
                     return RedirectToAction("form");
@@ -112,21 +110,16 @@ namespace MongoDbTutorial.Controllers
                 foreach (var id in ids)
                 {
                     try
-                    {
-						/*
-                         * we actually should not delete record from database
-                         * we just need to update delete column
-                         * await _userRepository.collection.DeleteOneAsync(Builders<User>.Filter.Eq("_id", ObjectId.Parse(id)));
-                         * */
-
+					{
 						var objectId = new ObjectId(id);
-						var existing = await _userRepository.collection.Find(x => x.Id == objectId).FirstOrDefaultAsync();
-                        var filter = Builders<User>.Filter.Eq("_id", ObjectId.Parse(id));
-                        var model = Builders<User>.Update
+						var existing = await _categoryRepository.collection.Find(x => x.Id == objectId).FirstOrDefaultAsync();
+                        var filter = Builders<Category>.Filter.Eq("_id", ObjectId.Parse(id));
+                        var model = Builders<Category>.Update
 							.Set("IsActive", false)
 							.Set("IsDeleted", true)
 							.Set("DateUpdated", DateTime.Now);
-                        await _userRepository.collection.UpdateOneAsync(filter, model);
+
+                        await _categoryRepository.collection.UpdateOneAsync(filter, model);
                     }
                     catch (Exception ex)
                     {
@@ -145,10 +138,10 @@ namespace MongoDbTutorial.Controllers
 
         protected async Task CreateIndexOnCollection()
         {
-            var notificationLogBuilder = Builders<User>.IndexKeys;
-            var indexModel = new CreateIndexModel<User>(notificationLogBuilder.Ascending(x => x.UserName));
+            var notificationLogBuilder = Builders<Category>.IndexKeys;
+            var indexModel = new CreateIndexModel<Category>(notificationLogBuilder.Ascending(x => x.Heading));
 
-            await _userRepository.collection.Indexes.CreateOneAsync(indexModel);
+            await _categoryRepository.collection.Indexes.CreateOneAsync(indexModel);
         }
     }
 }
