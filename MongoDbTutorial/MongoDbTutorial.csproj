@@ -182,6 +182,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\2019-07-09_16h12_10online-vide.gif" />
     <Content Include="img\bridge-fence-love-39495.jpg" />
     <Content Include="img\page_loader.gif" />
     <Content Include="Scripts\bootstrap.bundle.js" />
