@@ -6,8 +6,8 @@ namespace Model.Model
 {
     public class Category
     {
-		[BsonId]
-		public ObjectId Id { get; set; }
+		[BsonId, BsonRepresentation(BsonType.ObjectId)]
+		public string Id { get; set; }
 		public string Heading { get; set; }
 		public string Summary { get; set; }
 		public string Description { get; set; }

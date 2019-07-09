@@ -6,8 +6,8 @@ namespace Model.Model
 {
 	public class User
 	{
-		[BsonId]
-		public ObjectId Id { get; set; }
+		[BsonId, BsonRepresentation(BsonType.ObjectId)]
+		public string Id { get; set; }
 		/// <summary>
 		/// [BsonElement="FullName"]
 		/// Don't change BsonElement attribute if you have records on the document. Because it represents column name on the document.

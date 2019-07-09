@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<input type="hidden" id="deleteRecord" value="@(Model.Category != null ? Model.Category.Id : new MongoDB.Bson.ObjectId())"/>
+<input type="hidden" id="deleteRecord" value="@(Model.Category != null ? Model.Category.Id : "")"/>
 <div class="col-xs-12">
 	@using (Html.BeginForm("Form", "Category", FormMethod.Post, new { @class = "form-horizontal" }))
 	{

@@ -1,24 +1,23 @@
-﻿* { font-size: 14px !important; }
-body { padding-top: 50px; padding-bottom: 20px; }
-
-/* Set padding to keep content from hitting the edges */
+﻿body { padding-top: 0; padding-bottom: 20px; font-size: 14px; }
 .body-content { padding-left: 15px; padding-right: 15px; }
-
-/* Override the default bootstrap behavior where horizontal description lists
-   will truncate terms that are too long to fit in the left column
-*/
 .dl-horizontal dt { white-space: normal; }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea { max-width: 280px; }
+input, select, textarea { max-width: 280px; }
 
 table thead { font-weight: bold; }
-table td:not(:first-child) { min-width: 100px; max-width:300px; width: auto; text-overflow: ellipsis; white-space: nowrap; }
+table td:not(:first-child) { min-width: 100px; max-width: 300px; width: auto; text-overflow: ellipsis; white-space: nowrap; }
 
 .hidden { display: none !important; }
 .text-red { color: red; }
 .inactive-background { background-color: #eaeaea !important; color: #ccc !important; }
 .center-block { display: inline-block; text-align: center; }
 .ellipis { overflow: hidden; -ms-text-overflow: ellipsis; -o-text-overflow: ellipsis; text-overflow: ellipsis; display: block; white-space: nowrap; }
+
+/* validations */
+.input-validation-error { color: #E74C3C; border: solid 1px #E74C3C; }
+.field-validation-error { font-size: 95%; }
+
+.control-label { font-weight: bold; }
+.form-control { min-width: 100%; }
+
+.body-content { padding-top: 20px; }

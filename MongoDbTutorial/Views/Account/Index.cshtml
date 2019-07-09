@@ -1,0 +1,29 @@
+﻿@model MongoDbTutorial.Models.LoginVM
+
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+@using (Html.BeginForm("Index", "Account", FormMethod.Post, new { id = "login-form" }))
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true)
+
+	<div class="container">
+		<div class="form-group">
+			@Html.LabelFor(x => x.Email)
+			@Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+			@Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(x => x.Password)
+			@Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+			@Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
+		</div>
+		<div class="clearfix"></div>
+		<div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+	</div>
+}

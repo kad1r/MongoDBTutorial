@@ -1,0 +1,60 @@
+﻿@model ArticleVM
+
+@using MongoDbTutorial.Models;
+
+@{
+	ViewBag.Title = "Articles";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Categories</h2>
+<input type="hidden" id="deleteForm" value="@Url.Action("Delete")" />
+<a class="btn btn-outline-primary" href="@Url.Action("Form")">Create an Article</a>
+<a class="btn btn-outline-dark delete" href="javascript:void(0);">Delete selected Categories</a>
+<div class="clearfix"></div>
+<br />
+<div class="list">
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Created By</td>
+					<td>Categories</td>
+					<td>Heading</td>
+					<td>Summary</td>
+					<td>Description</td>
+					<td>Seo Description</td>
+					<td>Read Count</td>
+					<td>Publish Date</td>
+					<td>Inserted Date</td>
+					<td>Updated Date</td>
+					<td>Is Active?</td>
+					<td>Is Deleted?</td>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var article in Model.List)
+				{
+					<tr class="@(article.IsDeleted ? "inactive-background" : "")">
+						<td><input type="checkbox" id="id_@article.Id" value="@article.Id" /></td>
+						<td><a href="@Url.Action("Form", "article", new { id = article.Id })">Edit</a></td>
+						<td>@(article.CreatedUser != null ? article.CreatedUser.FullName : "")</td>
+						<td>@(article.Categories != null ? string.Join(",", article.Categories.Select(x => x.Heading).ToArray()) : "")</td>
+						<td class="text-nowrap">@article.Heading</td>
+						<td class="text-truncate">@article.Summary</td>
+						<td class="text-truncate">@article.Description</td>
+						<td class="text-truncate">@article.SeoDescription</td>
+						<td>@article.ReadCount</td>
+						<td>@article.DatePublished</td>
+						<td>@article.DateInserted</td>
+						<td>@article.DateUpdated</td>
+						<td>@article.IsActive</td>
+						<td class="@(article.IsDeleted ? "text-red" : "")">@article.IsDeleted</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
